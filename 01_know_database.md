@@ -12,7 +12,7 @@
 > 3. 回车后 登录管理员权限： **sudo su**
 > 4. 回车后输入以下命令来禁止mysql验证功能： **./mysqld_safe --skip-grant-tables &**
 > 5. 输入命令 **./mysql**
-> 6. 输入命令 **FLUSH PRIVILEGES**
+> 6. 输入命令 **FLUSH PRIVILEGES;**
 > 7. 输入命令 **SET PASSWORD FOR 'root'@'localhost' = PASSWORD('你的新密码')**
 
 ## 1 初识数据集
