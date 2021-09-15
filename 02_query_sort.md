@@ -1,6 +1,8 @@
 ## 02_query_sort
 
 > notes written by h1astro. 2021.9.15
+>
+> 学习了select语句，where、group by、order by、having语句。理解了运算符的用法，了解到可以用<>来表示不等于，单行、多行两种注释方法，NULL不能作为where条件，因为其真值结果不为真，也不为假。了解了聚合函数SUM、COUNT的用法，需要注意列名的类型。
 
 ### SELECT 语句基础
 
