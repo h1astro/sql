@@ -1,5 +1,7 @@
 ## 03_complex_query
 
+> 学习了视图、子查询的概念及其区别，以及如何使用。了解日期函数、转换函数的使用，ABS、MOD、CONCAT、LENGTH等函数和大多数语言相似，很容易理解。最后了解了谓词及CASE表达式的用法。
+>
 > Notes written by h1astro
 
 ### 视图
