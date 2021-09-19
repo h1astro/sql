@@ -422,3 +422,336 @@ sql 自带了各种各样的函数，极大提高了 sql 语言的便利性。
 
 函数总个数超过200个，不需要完全记住，常用函数有 30~50 个，其他不常用的函数使用时查阅文档即可。
 
+#### 算数函数
+
+演示几个算数函数，构造`samplemath`表
+
+```sql
+-- DDL ：创建表
+USE shop;
+DROP TABLE IF EXISTS samplemath;
+CREATE TABLE samplemath
+(m float(10,3),
+n INT,
+p INT);
+
+-- DML ：插入数据
+START TRANSACTION; -- 开始事务
+INSERT INTO samplemath(m, n, p) VALUES (500, 0, NULL);
+INSERT INTO samplemath(m, n, p) VALUES (-180, 0, NULL);
+INSERT INTO samplemath(m, n, p) VALUES (NULL, NULL, NULL);
+-- ...
+COMMIT; -- 提交事务
+-- 查询表内容
+SELECT * FROM samplemath;
++----------+------+------+
+| m        | n    | p    |
++----------+------+------+
+|  500.000 |    0 | NULL |
+| -180.000 |    0 | NULL |
+|     NULL | NULL | NULL |
+|     NULL |    7 |    3 |
+|     NULL |    5 |    2 |
+|     NULL |    4 | NULL |
+|    8.000 | NULL |    3 |
+|    2.270 |    1 | NULL |
+|    5.555 |    2 | NULL |
+|     NULL |    1 | NULL |
+|    8.760 | NULL | NULL |
++----------+------+------+
+11 rows in set (0.00 sec)
+```
+
+* ABS -- 绝对值
+
+语法：`ABS( 数值 )`
+
+ABS 函数用于计算一个数字的绝对值，表示一个数到原点的距离。
+
+当 ABS 函数的参数为`NULL`时，返回值也是`NULL`。
+
+* MOD -- 求余数
+
+语法：`MOD( 被除数，除数 )`
+
+MOD 是计算除法余数（求余）的函数，是 modulo 的缩写。小数没有余数的概念，只能对整数列求余数。
+
+注意：主流的 DBMS 都支持 MOD 函数，只有SQL Server 不支持该函数，其使用`%`符号来计算余数。
+
+* ROUND -- 四舍五入
+
+语法：`ROUND( 对象数值，保留小数的位数 )`
+
+ROUND 函数用来进行四舍五入操作。
+
+注意：当参数 **保留小数的位数** 为变量时，可能会遇到错误，请谨慎使用变量。
+
+```sql
+SELECT m,
+ABS(m) AS abs_col ,
+n, p,
+MOD(n, p) AS mod_col,
+ROUND(m,1) AS round_colS
+FROM samplemath;
+```
+
+#### 字符串函数
+
+```sql
+-- DDL ：创建表
+USE  shop;
+DROP TABLE IF EXISTS samplestr;
+CREATE TABLE samplestr
+(str1 VARCHAR (40),
+str2 VARCHAR (40),
+str3 VARCHAR (40)
+);
+-- DML：插入数据
+START TRANSACTION;
+INSERT INTO samplestr (str1, str2, str3) VALUES ('opx',	'rt', NULL);
+INSERT INTO samplestr (str1, str2, str3) VALUES ('太阳',	'月亮', '火星');
+INSERT INTO samplestr (str1, str2, str3) VALUES ('@!#$%', NULL, NULL);
+-- ...
+COMMIT;
+-- 确认表中的内容
+SELECT * FROM samplestr;
++-----------+------+------+
+| str1      | str2 | str3 |
++-----------+------+------+
+| opx       | rt   | NULL |
+| abc       | def  | NULL |
+| 太阳      | 月亮 | 火星 |
+| aaa       | NULL | NULL |
+| NULL      | xyz  | NULL |
+| @!#$%     | NULL | NULL |
+| ABC       | NULL | NULL |
+| aBC       | NULL | NULL |
+| abc哈哈   | abc  | ABC  |
+| abcdefabc | abc  | ABC  |
+| micmic    | i    | I    |
++-----------+------+------+
+11 rows in set (0.00 sec)
+```
+
+* CONCAT -- 拼接
+
+语法：`CONCAT(str1, str2, str3)` 。MySQL中使用 CONCAT 函数进行拼接。
+
+* LENGTH -- 字符串长度
+
+语法：`LENGTH( 字符串 )`
+
+* LOWER -- 小写转换
+
+只针对英文字母，转换为小写。类似的， UPPER 函数用于大写转换。
+
+* REPLACE -- 字符串的替换
+
+语法：`REPLACE( 对象字符串，替换前的字符串，替换后的字符串 )`
+
+* SUBSTRING -- 字符串的截取
+
+语法：`SUBSTRING （对象字符串 FROM 截取的起始位置 FOR 截取的字符数）`
+
+使用 SUBSTRING 函数 可以截取出字符串中的一部分字符串。截取的起始位置从字符串最左侧开始计算，索引值起始为1。
+
+```sql
+SELECT str1,str2,str3,
+	CONCAT(str1,str2,str3) AS str_concat,
+	LENGTH(str1) AS len_str,
+	LOWER(str1) AS low_str,
+	REPLACE(str1,str2,str3) AS rep_str,
+	SUBSTRING(str1 FROM 3 FOR 2) AS sub_str
+FROM samplestr;
+```
+
+<img src="./imgs/03/function.png" style="zoom:50%;" />
+
+#### 日期函数
+
+不同DBMS的日期函数语法各有不同，本课程介绍一些被标准 SQL 承认的可以应用于绝大多数 DBMS 的函数。特定DBMS的日期函数查阅文档即可
+
+* CURRENT_DATE -- 获取当前日期
+
+```sql
+SELECT CURRENT_DATE;
++--------------+
+| CURRENT_DATE |
++--------------+
+| 2021-09-19  |
++--------------+
+```
+
+* CURRENT_TIME -- 当前时间
+
+```sql
+SELECT CURRENT_TIME;
++--------------+
+| CURRENT_TIME |
++--------------+
+|  10:02:52     |
++--------------+
+```
+
+* CURRENT_TIMESTAMP -- 当前日期和时间
+
+```sql
+ SELECT CURRENT_TIMESTAMP;
++---------------------+
+| CURRENT_TIMESTAMP   |
++---------------------+
+| 2021-09-19 10:03:19 |
++---------------------+
+```
+
+* EXTRACT -- 截取日期元素
+
+语法：`EXTRACT(日期元素 FROM 日期)`
+
+使用 EXTRACT 函数可以截取出日期数据中的一部分，例如“年”
+
+“月”，或者“小时”“秒”等。该函数的返回值并不是日期类型而是数值类型
+
+```sql
+SELECT CURRENT_TIMESTAMP as now,
+EXTRACT(YEAR   FROM CURRENT_TIMESTAMP) AS year,
+EXTRACT(MONTH  FROM CURRENT_TIMESTAMP) AS month,
+EXTRACT(DAY    FROM CURRENT_TIMESTAMP) AS day,
+EXTRACT(HOUR   FROM CURRENT_TIMESTAMP) AS hour,
+EXTRACT(MINUTE FROM CURRENT_TIMESTAMP) AS MINute,
+EXTRACT(SECOND FROM CURRENT_TIMESTAMP) AS second;
++---------------------+------+-------+------+------+--------+--------+
+| now                 | year | month | day  | hour | MINute | second |
++---------------------+------+-------+------+------+--------+--------+
+| 2021-09-19 10:05:17 | 2021 |     9 |   19 |   10 |      5 |     17 |
++---------------------+------+-------+------+------+--------+--------+
+```
+
+#### 转换函数
+
+在 SQL 中主要有两层意思：
+
+1. 是数据类型的转换，简称为类型转换，在英语中称为`cast`；
+2. 另一层意思是值的转换。
+
+* CAST -- 类型转换
+
+语法：`CAST（转换前的值 AS 想要转换的数据类型）
+
+```sql
+-- 将字符串类型转换为数值类型
+SELECT CAST('0001' AS SIGNED INTEGER) AS int_col;
++---------+
+| int_col |
++---------+
+|       1 |
++---------+
+
+-- 将字符串类型转换为日期类型
+SELECT CAST('2021-09-19' AS DATE) AS date_col;
++------------+
+| date_col   |
++------------+
+| 2021-09-19 |
++------------+
+```
+
+* COALESCE -- 将NULL转换为其他值
+
+语法：`COALESCE(数据1，数据2，数据3……)`
+
+COALESCE 是 SQL 特有的函数。该函数会返回可变参数 A 中左侧开始第 1个不是NULL的值。参数个数是可变的，因此可以根据需要无限增加。
+
+在 SQL 语句中将 NULL 转换为其他值时就会用到转换函数。
+
+```sql
+SELECT COALESCE(NULL, 11) AS col_1,
+COALESCE(NULL, 'hello world', NULL) AS col_2,
+COALESCE(NULL, NULL, '2021-09-19') AS col_3;
++-------+-------------+------------+
+| col_1 | col_2       | col_3      |
++-------+-------------+------------+
+|    11 | hello world | 2021-09-19 |
++-------+-------------+------------+
+```
+
+### 谓词
+
+#### 什么是谓词
+
+谓词就是返回值为真值的函数。包括`TRUE / FALSE / UNKNOWN`。
+
+谓词主要有以下几个：
+
+* LIKE
+* BETWEEN
+* IS NULL、IS NOT NULL
+* IN
+* EXISTS
+
+#### LIKE谓词 -- 用于字符串的部分一致查询
+
+...
+
+### 练习题-第二部分
+
+####  3.5判断题
+
+运算中含有 NULL 时，运算结果是否必然会变为NULL ？
+
+否，SUM等函数含有NULL时不会全为NULL
+
+#### 3.6
+
+对本章中使用的 `product`（商品）表执行如下 2 条 `SELECT` 语句，能够得到什么样的结果呢？
+
+①
+
+```sql
+SELECT product_name, purchase_price
+  FROM product
+ WHERE purchase_price NOT IN (500, 2800, 5000);
+```
+
+②
+
+```sql
+SELECT product_name, purchase_price
+  FROM product
+ WHERE purchase_price NOT IN (500, 2800, 5000, NULL);
+```
+
+<img src="./imgs/03/answer1_6.png" style="zoom:50%;" />
+
+第一条返回购买价格不是500，2000，5000的对应行的产品名称和购买价格
+
+第二条因为NOT IN的参数含有NULL，所以结果为空。
+
+#### 3.7
+
+按照销售单价( `sale_price` )对练习 3.6 中的 `product`（商品）表中的商品进行如下分类。
+
+* 低档商品：销售单价在1000日元以下（T恤衫、办公用品、叉子、擦菜板、 圆珠笔）
+* 中档商品：销售单价在1001日元以上3000日元以下（菜刀）
+* 高档商品：销售单价在3001日元以上（运动T恤、高压锅）
+
+请编写出统计上述商品种类中所包含的商品数量的 SELECT 语句，结果如下所示。
+
+执行结果
+
+```sql
+low_price | mid_price | high_price
+----------+-----------+------------
+        5 |         1 |         2
+```
+
+```sql
+SELECT 
+	COUNT(CASE WHEN sale_price <= 1000 THEN sale_price END) AS low_price,
+  COUNT(CASE WHEN sale_price BETWEEN 1001 AND 3000 THEN sale_price end) AS mid_price,
+  COUNT(CASE WHEN sale_price >= 3001 THEN sale_price END) AS high_price
+FROM product;
+```
+
+<img src="./imgs/03/answer1_7.png" style="zoom:50%;" />
+
