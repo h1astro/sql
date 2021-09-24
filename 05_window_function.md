@@ -1,5 +1,9 @@
 ## 05_window_function
 
+> written by h1astro
+>
+> 学习了窗口函数的使用，partition by用来分组结合order by对窗口内分组的进行排序。了解了RANK、DENSE_RANK、ROW_NUMBER函数，以及计算平移平均，PRECEDING截止到之前n行以及FOLLOWING。最后学习了ROLLUP合计及小记函数的使用。
+
 窗口函数也称OLAP函数(OnLine Analytical Processing)的简称，对数据库数据进行实时分析处理。常规的SELECT语句都是对整张表进行查询，而窗口函数可以让我们有选择的去某一部分数据进行汇总、计算和排序。
 
 ```sql
@@ -7,7 +11,7 @@
                      ORDER BY <排序用列名>)  
 ```
 
-**PARTITON BY** 是用来分组，即选择要看哪个窗口，类似于 GROUP BY 子句的分组功能，但是 PARTITION BY 子句并不具备 GROUP BY 子句的汇总功能，并不会改变原始表中记录的行数。
+**PARTITION BY** 是用来分组，即选择要看哪个窗口，类似于 GROUP BY 子句的分组功能，但是 PARTITION BY 子句并不具备 GROUP BY 子句的汇总功能，并不会改变原始表中记录的行数。
 
 **ORDER BY** 是用来排序，即决定窗口内，是按那种规则(字段)来排序的。
 
