@@ -1,6 +1,6 @@
 ## 05_window_function
 
-> written by h1astro
+> notes written by h1astro
 >
 > 学习了窗口函数的使用，partition by用来分组结合order by对窗口内分组的进行排序。了解了RANK、DENSE_RANK、ROW_NUMBER函数，以及计算平移平均，PRECEDING截止到之前n行以及FOLLOWING。最后学习了ROLLUP合计及小记函数的使用。
 
